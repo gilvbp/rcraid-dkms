@@ -5,14 +5,14 @@ _pkgbase=rcraid
 pkgname=rcraid-dkms
 pkgver=17.2.1
 pkgrel=2
-pkgdesc="AMD AM4 socket X370/X470 chipset motherbroad NVMe/SATA RAID driver (DKMS)"
+pkgdesc="AMD AM4 socket TRX40/WRX80 chipset motherbroad NVMe/SATA RAID driver (DKMS)"
 arch=('i686' 'x86_64')
-url="https://www.amd.com/en/support/chipsets/amd-socket-am4/x370"
+url="https://www.amd.com/en/support/chipsets/amd-socket-swrx8/wrx80"
 license=('GPL2')
 depends=('dkms')
 makedepends=('linux-headers>=4.15')
 source=('dkms.conf')
-md5sums=('3a14dcc84daf257a62727bcde1882edf')
+md5sums=('SKIP')
 
 prepare()
 {
