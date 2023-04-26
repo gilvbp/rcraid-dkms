@@ -3,6 +3,7 @@
  * Copyright © 2006-2008 Ciprico Inc. All rights reserved.
  * Copyright © 2008-2013 Dot Hill Systems Corp. All rights reserved.
  * Copyright © 2015-2016 Seagate Technology LLC. All rights reserved.
+ * Copyright © 2019-2020 Advanced Micro Devices, Inc. All rights reserved.
  *
  * Use of this software is subject to the terms and conditions of the written
  * software license agreement between you and DHS (the "License"),
@@ -37,25 +38,29 @@ typedef int (* rc_adapter_func_t)(struct rc_adapter_s *adapter);
  * FIXME: must stay in sync with RAIDCore core - should share common header
  */
 #define MAX_PORTS_PER_HA    8
-#define MAX_HBA             8
+#define MAX_HBA             11
 #define MAX_TOTAL_PORTS     (MAX_HBA * MAX_PORTS_PER_HA)
 #define MAX_ARRAY           32
-#ifndef SECTOR_SIZE
+#ifndef	SECTOR_SIZE
 #define SECTOR_SIZE         512
-#endif
+#endif	/* SECTOR_SIZE */
 
 #define PCI_CFG_SIZE    256
 typedef struct rc_hw_info {
 	int pci_bus;
 	int pci_slot;
+    int pci_func;
 	int irq;
 	int ismsi;
+    struct msix_entry   msix_ent;
 	void *vaddr; // device memory map address
 	// Need to deal with 64bit paddrs.
 	// These types come from linux/ioport.h
 	unsigned long phys_addr;    // 32 bit bus address
 	int mem_len; // len of memory map
 	int adapter_number;
+    uint16_t        orig_vendor_id;
+    uint16_t        orig_device_id;
 	unsigned char pci_config_space[2 * PCI_CFG_SIZE];   // Allow for extended pci config space
 } rc_hw_info_t;
 
@@ -151,11 +156,11 @@ typedef struct rc_softstate  {
 	struct rc_srb_queue_s  srb_done;
 	struct rc_mop_queue_s  mop_done;
 	struct tasklet_struct  intr_tasklet;
-
+    
     struct delayed_work resume_work;
     int is_suspended;
     uint                   adapter_is_suspended;
-
+    
 	atomic_t               intr_pending;
 	rc_stats_t             stats;
 } rc_softstate_t;
@@ -179,6 +184,7 @@ typedef struct rc_softstate  {
 #define RC_SHWL_TYPE_AHCI   0x00000002
 #define RC_SHWL_TYPE_MPT    0x00000004
 #define RC_SHWL_TYPE_MPT2   0x00000008
+#define RC_SHWL_TYPE_NVME	0x00000010
 #define RC_SHWL_TYPE_ALL    0xffffffff
 
 typedef struct rc_version {

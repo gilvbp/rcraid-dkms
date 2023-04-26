@@ -10,7 +10,11 @@ arch=('i686' 'x86_64')
 url="https://www.amd.com/en/support/chipsets/amd-socket-swrx8/wrx80"
 license=('GPL2')
 depends=('dkms')
-makedepends=('linux-headers>=4.15')
+optdepends=('linux-headers>=4.15: build modules against the Arch kernel'
+            'linux-lts-headers>=4.15: build modules against the LTS kernel'
+            'linux-zen-headers>=4.15: build modules against the ZEN kernel'
+            'linux-lqx-headers>=4.15: build modules against the LQX kernel'
+            'linux-hardened-headers>=4.15: build modules against the HARDENED kernel')
 source=('dkms.conf')
 md5sums=('SKIP')
 
